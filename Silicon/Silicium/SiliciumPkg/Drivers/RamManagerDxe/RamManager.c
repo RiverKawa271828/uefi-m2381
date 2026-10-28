@@ -190,6 +190,8 @@ ManageRam (
   IN EFI_HANDLE        ImageHandle,
   IN EFI_SYSTEM_TABLE *SystemTable)
 {
+  DEBUG ((DEBUG_ERROR, "M2381>> RamManager ENTRY\n"));
+
   EFI_STATUS        Status;
   EFI_MEMORY_RANGE *MemoryRange;
   UINT8             MemoryRangeCount;
@@ -227,5 +229,6 @@ cleanup:
     FreePool (MemoryRange);
   }
 
-  return Status;
+    DEBUG ((DEBUG_ERROR, "M2381>> RamManager EXIT\n"));
+return Status;
 }

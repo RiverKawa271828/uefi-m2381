@@ -43,6 +43,8 @@ DiscoverDt (
   IN EFI_HANDLE        ImageHandle,
   IN EFI_SYSTEM_TABLE *SystemTable)
 {
+  DEBUG ((DEBUG_ERROR, "M2381>> IortDt ENTRY\n"));
+
   EFI_MEMORY_REGION_DESCRIPTOR XblDtRegion;
 
   // Locate XBL DT Memory Region

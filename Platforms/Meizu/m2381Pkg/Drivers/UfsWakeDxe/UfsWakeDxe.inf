@@ -1,0 +1,41 @@
+## @file UfsWakeDxe.inf
+#  Unconditional UFS device wake for the mars/m2381 chain: the m2381 ABL
+#  leaves the device in the PowerDown family and the OEM UFSDxe never reaches
+#  its own wake path on our boot order, so BDS freezes in the DiskIo retry
+#  flood.  This DXE driver runs before UFSDxe and drives the R23-proven
+#  sequence (SSU Active -> poll 0x11 -> NOP OUT -> SET fDeviceInit).
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+##
+
+[Defines]
+  INF_VERSION                    = 0x0010005
+  BASE_NAME                      = UfsWakeDxe
+  FILE_GUID                      = 7A1C5E93-2B44-4F86-9E51-C7D0A83F5B62
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UfsWakeDxeEntry
+
+[Sources]
+  UfsWakeDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ArmPkg/ArmPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  IoLib
+  CacheMaintenanceLib
+  BaseLib
+
+[Protocols]
+  gEfiCpuArchProtocolGuid
+
+[Depex]
+  TRUE
