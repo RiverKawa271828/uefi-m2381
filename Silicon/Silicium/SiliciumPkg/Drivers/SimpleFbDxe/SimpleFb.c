@@ -259,6 +259,8 @@ RegisterFrameBuffer (
   IN EFI_HANDLE        ImageHandle,
   IN EFI_SYSTEM_TABLE *SystemTable)
 {
+  DEBUG ((DEBUG_ERROR, "M2381>> SimpleFb ENTRY\n"));
+
   EFI_STATUS           Status;
   EFI_PHYSICAL_ADDRESS BaseAddress;
   UINT32               Width;

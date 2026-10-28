@@ -7,7 +7,7 @@ _StackBase:
   .quad FD_BASE         /* Text Offset */
 
 _StackSize:
-  .quad FD_SIZE + (_Payload - _Head) /* Complete shim and payload */
+  .quad FD_SIZE         /* Image Size */
   .quad 0               /* Flags */
   .quad 0               /* Reserved */
   .quad 0               /* Reserved */
@@ -18,6 +18,23 @@ _StackSize:
 
 _Start:
   mov   x4, x1
+
+#if DISABLE_GUNYAH_WATCHDOG == 1
+  /*
+   * Some Gunyah-based boot chains leave the VM watchdog running when ABL
+   * exits boot services. Disable it before copying the firmware volume so a
+   * slow UEFI initialization cannot expire the inherited timeout.
+   *
+   * GUNYAH_WDT_CONTROL = ARM_SMCCC fast SMC32, vendor-hyp owner, function 5
+   * WDT_CTRL_DISABLE    = BIT(1)
+   */
+  movz  x0, #0x0005
+  movk  x0, #0x8600, lsl #16
+  mov   x1, #2
+  mov   x2, #0
+  smc   #0
+#endif
+
   ldr   x5, =FD_BASE
   cmp   x4, x5
   beq   _Entry
@@ -31,33 +48,12 @@ _CopyLoop:
   ldr   x5, =FD_BASE
 
 _Entry:
-  /* Publish the copied instructions before executing them. */
-  dsb   sy
-  mrs   x9, ctr_el0
-  ubfx  x9, x9, #16, #4
-  mov   x10, #4
-  lsl   x9, x10, x9
-  sub   x10, x9, #1
-  bic   x8, x5, x10
-  ldr   x7, =FD_SIZE
-  add   x7, x5, x7
-
-_CleanLoop:
-  dc    cvac, x8
-  add   x8, x8, x9
-  cmp   x8, x7
-  b.lo  _CleanLoop
-  dsb   sy
-  ic    iallu
-  dsb   sy
-  isb
   br    x5
 
 _Dead:
   b     _Dead
 
 .text
-.ltorg
 .align 4
 
 _Payload:

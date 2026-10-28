@@ -1,0 +1,44 @@
+sm8550-meizu-20.dtb — m2381 device tree (compiled from sm8550-meizu-20.dts).
+Authoritative source (fork era, 2026-09-30): linux-mobile-ports (fork tree)
+branch meizu20/7.3; artifact = boot/dtbs/qcom/sm8550-meizu-20.dtb from the
+pmaports linux-meizu-meizu20 apk (build in chroot, same dtc every round).
+sha256 (dtb e499c80d, full in git history at f9808c21^)
+(factory-first v3b: fork 11d8c1142b97, adspslpi 0x4080000 固件合约面回退;
+ deployed in boot_b Mu 831b1691)
+T-TC round 2026-10-04: fork 377e4d3256ae dtb 108a0a5e (qcom,panel-phy-timings
+byte-scale) was baked in as f9808c21, built as mu-ttc-3fe4ecb0.img, flashed
+and JUDGED NEGATIVE — true-sleep wake snowflake 5/5 same structure as
+bitclk/E4 rounds. TC0-13 eliminated. Rolled back to v3b this commit.
+prep round 2026-10-04 (缺件第 2 轮前置·阶段 A): fork 02e305cf35c5 dtb 4a248839
+(136,216B; three m2381 DTS changes: iris firmware-name=qcom/vpu/vpu30_4v.mbn
+bridge, nfc@28 nxp-nci-i2c node @i2c0/a80000, haptics stub verdict=Awinic HV
+i2c 0x5a@994000). linux-meizu-meizu20 r54 apk; kernel #55.
+r55 mini round 2026-10-04 (device day, user calls S2=15 + haptics now): fork
+2d88f9ac6236 dtb 78cc13e6 (136,352B; +&i2c_hub_5 enable + haptics@5a
+awinic,aw86927; panel BL_MIN 50->15 in kernel .c). linux-meizu-meizu20 r55;
+kernel #56.
+r56 wrap-up 2026-10-04 (device day): fork fdc85c521bf2 dtb de3d9515 (haptics
+reset ACTIVE_LOW per live measurement; chip identified AW8697). kernel #57.
+r57 round 2026-10-04 (AW8697 driver route B, user "use B first"): fork
+a9264ee6812d dtb 6cbabfd0 (136,352B; haptics@5a compatible awinic,aw86927 ->
+awinic,aw8697 for the new in-tree aw8697.c minimal ff-memless CONT driver;
+irq99/reset109 resources unchanged). linux-meizu-meizu20 r57 apk; kernel #58.
+inf 残留清理轮 2026-10-06 (大清理 (六十三)): fork 4ef563b1a467 dtb 2d01bf32
+(135794 B; DTS pmic-glink/sndcard compatible 去 -inf + model MEIZU20Inf->MEIZU20,
+与 qcom_battmgr.c/sc8280xp.c C match 同批; linux-meizu-meizu20 r60 apk
+7.3.0_rc3-r60; kernel #61 期望; +CONFIG_ZRAM=m 搭车). DTB = r60 apk 内
+boot/dtbs/qcom/sm8550-meizu-20.dtb.
+录音轮 A0 2026-10-06 (VA 宏 DMIC capture): fork bc6724867057 dtb 465c4dc0
+(135982 B; sound 节点加 va-dai-link[cpu TX_CODEC_DMA_TX_3/codec lpass_vamacro 0/
+platform q6apm, HDK sm8550-hdk.dts 同构] + sound pinctrl-0 追加 dmic01/23_default;
+stock flyme 录音 = PDM 数字麦, WCD 零关系). linux-meizu-meizu20 r62 apk
+7.3.0_rc3-r62; kernel #63 期望. DTB = r62 apk 内
+boot/dtbs/qcom/sm8550-meizu-20.dtb. Mu = mu-r62-9f1e8f8d.img, ESP = v44
+(d3ad95fa, BOOTAA64.EFI = r62 vmlinuz df5c7cfb).
+r67/r68 补账 + r69 轮 2026-10-08 (pm_test 阶梯 + pstore demura 覆写破案):
+fork 09c641166046(r67 极性中间态)+4ea84613d3c6(r68 stock gpio-ctrl 全套
+INTB 真根因修复)+9beb8c10a21d(r69 ramoops 0xa5100000->0xa8000000 搬位,
+Mu 内存图 Display Demura 0xA2A80000+0x2B00000 每 boot 覆写=六死零现场根因)
+—— 本提交 FdtBlob = r69 apk 内 dtb 137380B(含 r68+r69 两轮 delta,
+r67/r68 当时未入库=欠账于此一并补齐)。apk 7.3.0_rc3-r69; kernel #70 期望。
+Mu = mu-r69-97cdea20.img, ESP = v50。
